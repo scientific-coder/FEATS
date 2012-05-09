@@ -60,6 +60,8 @@ Out compute_seg(ItData beg, ItData end, ItSeg computed_beg, ItSeg computed_end
   }
   return result_out;
 }
+
+// needed because std::back_insert_iterator<> do not define ::value_type
 template <typename It> struct generic_traits : std::iterator_traits<It> {};
 template <typename C> struct generic_traits<std::back_insert_iterator<C> >
 : std::iterator_traits<typename C::iterator> {};
@@ -117,7 +119,6 @@ int main(int argc, char* argv[]){
   for(std::size_t i(0); i != nb_segs; ++i){
     if(i==0){
       compute_initial_seg(data.begin(), data.end(), std::back_inserter(all_segs.front()));
-      //      std::reverse(all_segs.front().begin(), all_segs.front().end());
     }else {
       compute_seg(data.begin(), data.end(), all_segs[i-1].begin()+1, all_segs[i-1].end()
                   , std::back_inserter(all_segs[i]));
